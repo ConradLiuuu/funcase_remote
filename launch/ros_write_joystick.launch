@@ -1,0 +1,5 @@
+<launch>
+  <param name="/joy_node/dev" type="string" value="/dev/input/js2" />
+  <node name="joy_node" pkg="joy" type="joy_node" />
+  <node name="pub_and_enc_joystick" pkg="funcase_remote" type="pub_and_enc_joystick.py" />
+</launch>
