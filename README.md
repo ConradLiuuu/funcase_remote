@@ -7,7 +7,7 @@ Encode joystick and send commanad via ROS:
 roslaunch funcase_remote ros_write_joystick.launch
 
 
-At remote terminal:
+At robot:
 
 Receive Encode joystick command via LoRa:
 rosrun funcase_remote lora_rec_joy.py
