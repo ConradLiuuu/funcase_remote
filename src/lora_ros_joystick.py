@@ -68,16 +68,16 @@ def callback(data):
     #print("Encoding axes = ",enc_axes)
     
     ## Encoding axes
-    sum_axe_front = enc_axes[0]*64 + enc_axes[1]*16 + enc_axes[2]*4 + enc_axes[3]*1
+    sum_axe_front = enc_axes[0]*64 + enc_axes[1]*16 + enc_axes[3]*4 + enc_axes[4]*1
     #print("axe front part = ",seg_axes[0:4])
     #print("sum of axe front part = ",sum_axe_front)
 
-    sum_axe_below = enc_axes[4]*64 + enc_axes[5]*16 + enc_axes[6]*4 + enc_axes[7]*1
+    sum_axe_below = enc_axes[2]*64 + enc_axes[5]*16 + enc_axes[6]*4 + enc_axes[7]*1
     #print("axe below part = ",seg_axes[4:8])
     #print("sum of axe below part = ",sum_axe_below)
     
     ## Encoding buttons
-    sum_button = joy[8]*64 + joy[9]*32 + joy[10]*16 + joy[11]*8 +joy[14]*4 + joy[15]*2 + joy[16]*1
+    sum_button = joy[8]*64 + joy[9]*32 + joy[10]*16 + joy[11]*8 +joy[15]*4 + joy[14]*2 + joy[16]*1
     #print("sum of buttons =",sum_button) 
 
     #joy_cmd = [header,sum_button,sum_cross_key]
