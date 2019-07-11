@@ -1,3 +1,4 @@
 <launch>
   <node name="switch_camera" pkg="funcase_remote" type="switch_camera.py" />
+  <node name="warning" pkg="funcase_remote" type="warning" />
 </launch>
