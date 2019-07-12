@@ -31,7 +31,7 @@ def callback(data):
      
 def listener():
     rospy.init_node('switch_camera')
-    rospy.Subscriber("/joy_commands", Bool, callback, queue_size=1)
+    rospy.Subscriber("/switch_camera", Bool, callback, queue_size=1)
 
 while not rospy.is_shutdown():
     listener()
