@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 import rospy
 from sensor_msgs.msg import Joy
-#from std_msgs.msg import UInt8MultiArray
-from funcase_client.msg import JoyCmd
+from std_msgs.msg import UInt8MultiArray
+#from funcase_client.msg import JoyCmd
 
 def callback(data):
+    joy_cmddd = UInt8MultiArray()
     axe = data.axes
     button = data.buttons
     #joy_cmddd = UInt8MultiArray()
@@ -43,8 +44,8 @@ def callback(data):
     sum_axe_below = enc_axes[2]*64 + enc_axes[5]*16 + enc_axes[6]*4 + enc_axes[7]*1
     sum_button = joy[8]*64 + joy[9]*32 + joy[10]*16 + joy[11]*8 +joy[15]*4 + joy[14]*2 + joy[16]*1
     
-    joy_cmddd = [sum_button, sum_axe_front, sum_axe_below]
-    pub = rospy.Publisher('joy_commands', JoyCmd, queue_size = 10)
+    joy_cmddd.data = [sum_button, sum_axe_front, sum_axe_below]
+    pub = rospy.Publisher('joy_commands', UInt8MultiArray, queue_size = 10)
     pub.publish(joy_cmddd)
 
 def listener():
