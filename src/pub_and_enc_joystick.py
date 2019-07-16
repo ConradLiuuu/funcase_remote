@@ -12,13 +12,16 @@ def callback(data):
     joy = axe + button
     seg_axes = []
     enc_axes = []
+    boundary = 0.5
     for i in range(0,8):
+
+
         tmp = joy[i]
-        if tmp > 0.2:
+        if tmp >= boundary:
             tmp = 1
-        elif tmp < 0.2 and tmp > -0.2:
+        elif tmp < boundary and tmp > -boundary:
             tmp = 0
-        elif tmp < -0.2:
+        elif tmp <= -boundary:
             tmp = -1
         seg_axes.append(tmp)
     

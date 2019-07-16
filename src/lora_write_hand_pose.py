@@ -18,25 +18,25 @@ header = '*'
 sep = ','
 
 def callback(data):
-    #num = []
-    #num_list = []
     pose = data.data
     #print(pose)
-    str_pose = str(pose[0]) + sep + str(pose[1]) + sep + str(pose[2]) + sep + str(pose[3]) + sep + str(pose[4]) + sep + str(pose[5]) + sep + str(pose[6]) + sep + str(pose[7]) + sep + str(pose[8]) + sep
+    str_pose = header + str(pose[0]) + sep + str(pose[1]) + sep + str(pose[2]) + sep + str(pose[3]) + sep + str(pose[4]) + sep + str(pose[5]) + sep + str(pose[6]) + sep + str(pose[7]) + sep + str(pose[8]) + sep
     print(str_pose)
+    #print(len(str_pose))
 
 
-    #print "len of str_pose = ",len(str_pose)
     if len(str_pose) <= 16:
-        LoRa.FunLora_5_write16bytesArrayString(header)
+        #LoRa.FunLora_5_write16bytesArrayString(header)
         LoRa.FunLora_5_write16bytesArrayString(str_pose)
         print(str_pose)
-    
+   
     if len(str_pose) > 16:
-        front = str(pose[0]) + sep + str(pose[1]) + sep + str(pose[2]) + sep + str(pose[3]) + sep
-        midd = str(pose[4]) + sep + str(pose[5]) + sep + str(pose[6]) + sep + str(pose[7]) + sep
-        below = str(pose[8]) + sep
-        LoRa.FunLora_5_write16bytesArrayString(header)
+        front = header + str(pose[0]) + sep + str(pose[1]) + sep + str(pose[2]) + sep
+        midd = str(pose[3]) + sep + str(pose[4]) + sep + str(pose[5]) + sep + str(pose[6]) + sep
+        below = str(pose[7]) + sep + str(pose[8]) + sep
+        #print(front)
+        #print(midd)
+        #print(below)
         LoRa.FunLora_5_write16bytesArrayString(front)
         LoRa.FunLora_5_write16bytesArrayString(midd)
         LoRa.FunLora_5_write16bytesArrayString(below)
