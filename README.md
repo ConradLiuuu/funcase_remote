@@ -10,5 +10,5 @@ roslaunch funcase_remote ros_write_joystick.launch
 At robot:
 
 Receive Encode joystick command via LoRa:
-rosrun funcase_remote lora_rec_joy.py
+roslaunch funcase_remote lora_rec_joycmd.launch
 
