@@ -14,7 +14,7 @@ LoRa.FunLora_2_ReadSetup()
 LoRa.FunLora_3_TX()
 print("LoRa Ready!!!")
 
-header = '*'
+header = '+'
 sep = ','
 
 def callback(data):

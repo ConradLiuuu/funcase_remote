@@ -24,6 +24,7 @@ LoRa.FunLora_3_RX();
 print("Lora is ready !!")
 
 joy = []
+joy_cmd = UInt8MultiArray()
 while not rospy.is_shutdown():
   pin2 = GPIO.input(lora_in)
   #print(pin2)
@@ -42,8 +43,9 @@ while not rospy.is_shutdown():
       if len(joy) == 3:
         print("array joy = ")
         print(joy)
+        joy_cmd.data = joy
         pub = rospy.Publisher('joy_commands', UInt8MultiArray, queue_size = 10)
-        pub.publish(joy)
+        pub.publish(joy_cmd)
         joy = []
       
 # close lora

@@ -11,7 +11,7 @@ LoRa = ifroglab.LoRa()
 rospy.init_node('lora_read_hand_pose')
 
 gpio.setmode(gpio.BCM)
-gpio.setup(18,gpio.IN)
+gpio.setup(22,gpio.IN)
 
 ser=LoRa.FunLora_initByName("/dev/ttyUSB0")
 LoRa.FunLora_0_GetChipID()
@@ -24,7 +24,7 @@ print("Lora ready!!")
 hand_pose = []
 pub_pose = Int16MultiArray()
 while not rospy.is_shutdown():
-    pin2 = gpio.input(18)
+    pin2 = gpio.input(22)
     #print("pin2 = ",pin2)
     if pin2 == 1:
         data=LoRa.FunLora_6_readPureData()
@@ -35,7 +35,7 @@ while not rospy.is_shutdown():
             str_data = []
             for i in data:
                 #print(chr(i))
-                if i == 42:
+                if i == 43:
                     print "hand_pose = ",hand_pose
                     pub_pose.data = hand_pose
                     pub = rospy.Publisher('hand_pose', Int16MultiArray, queue_size = 10)
