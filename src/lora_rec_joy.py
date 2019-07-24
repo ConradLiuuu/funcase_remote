@@ -33,7 +33,7 @@ while not rospy.is_shutdown():
     str_data = []
     data=LoRa.FunLora_6_readPureData()
     if len(data) != 0:  
-      if data[0] != 45:
+      if data[0] != 42:
         for i in data:
           if i >= 48 and i <= 57:
             str_data.append(chr(i))

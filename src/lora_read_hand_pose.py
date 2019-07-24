@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import ifroglab
+import ifroglab_jetson as ifroglab
 import rospy
 from std_msgs.msg import Int16MultiArray
 from time import time

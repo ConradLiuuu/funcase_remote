@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 import rospy
 from sensor_msgs.msg import Joy
+from std_msgs.msg import Int16MultiArray
 import ifroglab_funcase
 from time import sleep
 
 LoRa =  ifroglab_funcase.LoRa()
-rospy.init_node('lora_ros_joystick')
+rospy.init_node('lora_write_joycmd_handpose')
 
 # LoRa setup
 ser=LoRa.FunLora_initByName("/dev/ttyACM0")
@@ -15,20 +16,20 @@ LoRa.FunLora_2_ReadSetup()
 LoRa.FunLora_3_TX()
 print("LoRa Ready!!!")
 
+header2 = '*'
+sep = ','
 seg_axes = []
 enc_axes = []
 joy_cmd = []
-header = '-'
-def callback(data):
+
+def callback_joycmd(data):
     axe = data.axes
     button = data.buttons
     joy = axe + button
     seg_axes = []
     enc_axes = []
-    #axe.extend(button)
-    #print(joy)
+
     ## Segment axes
-    
     for i in range(0,8):
         tmp = joy[i]
         if tmp > 0.5:
@@ -60,13 +61,6 @@ def callback(data):
             tmp2 = 2
         enc_axes.append(tmp2)
     
-    ## Use cross key to remote robot
-    #print(joy)
-    #print(enc_axes)
-    #print("sum of cross key = ",sum_cross_key)
-    #enc_axes = [tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7]
-    #print("Encoding axes = ",enc_axes)
-    
     ## Encoding axes
     sum_axe_front = enc_axes[0]*64 + enc_axes[1]*16 + enc_axes[3]*4 + enc_axes[4]*1
     #print("axe front part = ",seg_axes[0:4])
@@ -80,28 +74,16 @@ def callback(data):
     sum_button = joy[8]*64 + joy[9]*32 + joy[10]*16 + joy[11]*8 +joy[15]*4 + joy[14]*2 + joy[16]*1
     #print("sum of buttons =",sum_button) 
 
-    #joy_cmd = [header,sum_button,sum_cross_key]
-    joy_cmd = [header,sum_button,sum_axe_front,sum_axe_below]
-    print("joy_cmd = ",joy_cmd)
-    #if joy_cmd[1] == 0 and joy_cmd[2] == 0 and joy_cmd[3] == 0:
-        #LoRa.FunLora_5_write16bytesArrayString(str(joy_cmd[0]))
-        #a = 0
-    #else:
+    #joy_cmd = [header2,sum_button,sum_axe_front,sum_axe_below]
+    joy_cmd = header2 + str(sum_button) + sep + str(sum_axe_front) + sep + str(sum_axe_below) +sep
+    #print("joy_cmd = ",joy_cmd)
+    LoRa.FunLora_5_write16bytesArrayString(joy_cmd)
+    print joy_cmd
     
-    LoRa.FunLora_5_write16bytesArrayString(str(joy_cmd[0]))
-    LoRa.FunLora_5_write16bytesArrayString(str(joy_cmd[1]))
-    LoRa.FunLora_5_write16bytesArrayString(str(joy_cmd[2]))
-    LoRa.FunLora_5_write16bytesArrayString(str(joy_cmd[3]))
-    
-    #for i in range(0,len(joy_cmd)):
-        #LoRa.FunLora_5_write16bytesArrayString(str(joy_cmd[i]))
-    
+
 def listener():
-    rospy.init_node('lora_ros_joystick')
-    rospy.Subscriber("/joy", Joy, callback, queue_size=1)
+    rospy.Subscriber("/joy", Joy, callback_joycmd, queue_size=1)
     rospy.spin()
 
 while not rospy.is_shutdown():
     listener()
-    rospy.spin()
-    

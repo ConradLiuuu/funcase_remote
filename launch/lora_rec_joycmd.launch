@@ -1,5 +1,5 @@
 <launch>
-  <node name="lora_rec_joy" pkg="funcase_remote" type="lora_rec_joy.py" />
+  <node name="lora_read_joycmd" pkg="funcase_remote" type="lora_read_joycmd.py" />
   <node name="switch_camera" pkg="funcase_remote" type="switch_camera.py" />
   <node name="lora_read_hand_pose" pkg="funcase_remote" type="lora_read_hand_pose.py" />
   <node name="warning" pkg="funcase_remote" type="warning" />
