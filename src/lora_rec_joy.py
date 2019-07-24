@@ -1,19 +1,18 @@
 #!/usr/bin/env python
-import sys
-sys.path.append('/opt/nvidia/jetson-gpio/lib/python/')
-sys.path.append('/opt/nvidia/jetson-gpio/lib/python/GPIO')
-import Jetson.GPIO as GPIO
+import RPi.GPIO as GPIO
 import ifroglab_jetson
 import time
-from funcase_client.msg import JoyCmd
+from std_msgs.msg import UInt8MultiArray
+#from funcase_client.msg import JoyCmd
 import rospy 
 import os
 
+os.system('sudo chmod a+rw /dev/ttyUSB0')
 LoRa = ifroglab_jetson.LoRa()
 rospy.init_node('lora_rec_joy')
 
 GPIO.setmode(GPIO.BCM)
-lora_in = 23
+lora_in = 18
 GPIO.setup(lora_in,GPIO.IN)
 
 ## lora setup
@@ -26,7 +25,7 @@ print("Lora is ready !!")
 
 joy = []
 while not rospy.is_shutdown():
-  pin2 = GPIO.input(23)
+  pin2 = GPIO.input(lora_in)
   #print(pin2)
 
   if pin2 == 1:
@@ -43,7 +42,7 @@ while not rospy.is_shutdown():
       if len(joy) == 3:
         print("array joy = ")
         print(joy)
-        pub = rospy.Publisher('joy_commands', JoyCmd, queue_size = 10)
+        pub = rospy.Publisher('joy_commands', UInt8MultiArray, queue_size = 10)
         pub.publish(joy)
         joy = []
       
