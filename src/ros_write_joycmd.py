@@ -63,6 +63,6 @@ class Joycmd:
         self.pub_joycmd.publish(joy_cmddd)
 
 if __name__ == '__main__':
-    rospy.init_node('ros_write_joycmd')
+    rospy.init_node('ros_write_joycommands')
     Joycmd()
     rospy.spin()
