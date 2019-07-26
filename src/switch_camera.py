@@ -3,29 +3,27 @@ import rospy
 from std_msgs.msg import Bool
 import RPi.GPIO as gpio
 
-gpio.setmode(gpio.BCM)
-switch_pin = 17
+class switch_camera:
 
-gpio.setup(switch_pin,gpio.OUT)
-gpio.output(switch_pin,0)
-switch = False
+    def __init__(self):
+        self.switch_pin = 17
+        self.switch = False
+        gpio.setmode(gpio.BCM)
+        gpio.setup(self.switch_pin,gpio.OUT)
+        gpio.output(self.switch_pin,0)
+        self.sub = rospy.Subscriber("/switch_camera", Bool, self.callback, queue_size=1)
 
-def callback(data):
-    global switch
-    swit = data.data
+    def callback(self, data):
+        self.switch = data.data
 
-    if swit == True:
-        switch = True
-        gpio.output(switch_pin, 1)
-    if swit == False:
-        switch = False
-        gpio.output(switch_pin, 0)
-    print "switch is ",switch
+        if self.switch == True:
+            gpio.output(self.switch_pin, 1)
+        if self.switch == False:
+            gpio.output(self.switch_pin, 0)
+        print "switch status is : ", self.switch
 
-def listener():
+if __name__ == '__main__':
     rospy.init_node("switch_camera")
-    rospy.Subscriber("/switch_camera", Bool, callback, queue_size=1)
-
-while not rospy.is_shutdown():
-    listener()
+    switch_camera()
     rospy.spin()
+
