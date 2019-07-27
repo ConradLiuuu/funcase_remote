@@ -1,24 +1,35 @@
 #include <stdio.h>
 #include <ros/ros.h>
 #include "std_msgs/Bool.h"
+using namespace ros;
 
-void callback(const std_msgs::Bool::ConstPtr& msg)
+class Warning
 {
-  if (msg -> data == true)
+public:
+  Warning()
   {
-    ROS_INFO("play warning one");
-    system("omxplayer -o local warning1.mp3");
+    sub = nh.subscribe("BZ5", 10, &Warning::callback, this);
   }
-}
-int main(int argc, char** argv)
+  void callback(const std_msgs::Bool::ConstPtr& msg)
+  {
+    if (msg -> data == true)
+    {
+      ROS_INFO("Detect target !!!");
+      system("omxplayer -o local warning1.mp3");
+    }
+  }
+
+private:
+  NodeHandle nh;
+  Subscriber sub;
+};
+
+int main(int argc, char **argv)
 {
-  ros::init(argc,argv,"warning");
-  ROS_INFO("Ready to make warning");
-
-  ros::NodeHandle n;
-
-  ros::Subscriber sub = n.subscribe("BZ5",10,callback);
-  ros::spin();
+  init(argc,argv,"warning");
+  ROS_INFO("Ready to issue target warning");
+  Warning warning;
+  spin();
   return 0;
 }
 

@@ -1,6 +1,5 @@
 <launch>
   <param name="/joy_node/dev" type="string" value="/dev/input/js2" />
   <node name="joy_node" pkg="joy" type="joy_node" />
-  <node name="lora_ros_joystick" pkg="funcase_remote" type="lora_ros_joystick.py" />
-  <node name="lora_write_hand_pose" pkg="funcase_remote" type="lora_write_hand_pose.py" />
+  <node name="lora_write_joycmd" pkg="funcase_remote" type="lora_write_joycmd" />
 </launch>

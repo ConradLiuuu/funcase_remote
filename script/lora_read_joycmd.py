@@ -1,51 +1,52 @@
 #!/usr/bin/env python
 import RPi.GPIO as GPIO
 import ifroglab_jetson
-import time
 from std_msgs.msg import UInt8MultiArray
-#from funcase_client.msg import JoyCmd
 import rospy
-import os
 
-os.system('sudo chmod a+rw /dev/ttyUSB0')
-LoRa = ifroglab_jetson.LoRa()
-rospy.init_node('lora_rec_joy')
+class lora_read_joycmd:
 
-GPIO.setmode(GPIO.BCM)
-lora_in = 18
-GPIO.setup(lora_in,GPIO.IN)
+    def __init__(self):
+        ## RPi.GPIO setting
+        self.lora_in = 18
+        self.pin2 = 0
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.lora_in,GPIO.IN)
+        ## LoRa init and setup
+        self.data
+        self.LoRa = ifroglab_funcase.LoRa()
+        self.ser = self.LoRa.FunLora_initByName("/dev/ttyUSB0")
+        self.LoRa.FunLora_0_GetChipID()
+        self.LoRa.FunLora_1_Init()
+        self.LoRa.FunLora_2_ReadSetup()
+        self.LoRa.FunLora_3_RX()
+        print "LoRa is ready !!!"
+        ## ros init
+        self.pub = rospy.Publisher('/joy_commands', UInt8MultiArray, queue_size = 10)
+        self.joy_cmd = UInt8MultiArray()
 
-## lora setup
-ser=LoRa.FunLora_initByName("/dev/ttyUSB0")
-LoRa.FunLora_0_GetChipID()
-LoRa.FunLora_1_Init()
-LoRa.FunLora_2_ReadSetup()
-LoRa.FunLora_3_RX();
-print("Lora is ready !!")
+    def read(self):
+        joy = []
+        self.pin2 = GPIO.input(self.lora_in)
+        if self.pin2 == 1:
+            self.data = LoRa.FunLora_6_readPureData()
+            if len(self.data) > 0 and self.data[0] == 42:
+                str_data = []
+                for i in self.data:
+                    if i == 42:
+                        print "joy_cmd = ", joy
+                        self.joy_cmd.data = joy
+                        pub.publish(self.joy_cmd)
+                        joy = []
+                    if i >= 44 and i <= 57:
+                        if i != 44:
+                            str_data.append(chr(i))
+                            str_data2 = "".join(str_data)
+                        if i == 44:
+                            joy.append(int(str_data2))
+                            str_data = []
 
-joy = []
-joy_cmd = UInt8MultiArray()
-
-while not rospy.is_shutdown():
-    pin2 = GPIO.input(lora_in)
-    if pin2 == 1:
-        data = LoRa.FunLora_6_readPureData()
-        if len(data) > 0 and data[0] == 42:
-            str_data = []
-            for i in data:
-                if i == 42:
-                    print "joy_cmd = ", joy
-                    joy_cmd.data = joy
-                    pub = rospy.Publisher('joy_commands', UInt8MultiArray, queue_size = 10)
-                    pub.publish(joy_cmd)
-                    joy = []
-                if i >= 44 and i <= 57:
-                    if i != 44:
-                        str_data.append(chr(i))
-                        str_data2 = "".join(str_data)
-                    if i == 44:
-                        joy.append(int(str_data2))
-                        str_data = []
-
-LoRa.FunLora_close()
-                          
+if __name__ == '__main__':
+    rospy.init_node("lora_read_joycmd")
+    read = lora_read_joycmd()
+    read.read()

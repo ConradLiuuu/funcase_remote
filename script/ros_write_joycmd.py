@@ -8,7 +8,6 @@ class Joycmd:
     def __init__(self):
         self.axe = []
         self.button = []
-        self.joy = []
         self.sum_button = 0
         self.sum_axe_front = 0
         self.sum_axe_below = 0
@@ -19,20 +18,19 @@ class Joycmd:
     def callback(self, data):
         self.axe = data.axes
         self.button = data.buttons
-        self.joy = self.axe + self.button
-        seg_axes = []
-        enc_axes = []
+        seg_axes = [0,0,0,0,0,0,0,0]
+        enc_axes = [0,0,0,0,0,0,0,0]
 
         ## processing axes
         for i in range(0,8):
-            tmp = self.joy[i]
+            tmp = self.axe[i]
             if tmp >= self.boundary:
                 tmp = 1
             elif tmp < self.boundary and tmp > -self.boundary:
                 tmp = 0
             elif tmp <= -self.boundary:
                 tmp = -1
-            seg_axes.append(tmp)
+            seg_axes[i] = tmp
 
         if seg_axes[2] <= 1 and seg_axes[2] > -1:
             seg_axes[2] = 0
@@ -51,12 +49,12 @@ class Joycmd:
                 tmp2 = 1
             elif seg_axes[i] == -1:
                 tmp2 = 2
-            enc_axes.append(tmp2)
+            enc_axes[i] = tmp2
 
         ## encoding axes
         self.sum_axe_front = enc_axes[0]*64 + enc_axes[1]*16 + enc_axes[3]*4 + enc_axes[4]*1
         self.sum_axe_below = enc_axes[2]*64 + enc_axes[5]*16 + enc_axes[6]*4 + enc_axes[7]*1
-        self.sum_button = self.joy[8]*64 + self.joy[9]*32 + self.joy[10]*16 + self.joy[11]*8 + self.joy[15]*4 + self.joy[14]*2 + self.joy[16]*1
+        self.sum_button = self.button[0]*64 + self.button[1]*32 + self.button[2]*16 + self.button[3]*8 + self.button[7]*4 + self.button[6]*2 + self.button[8]*1
 
         joy_cmddd = UInt8MultiArray()
         joy_cmddd.data = [self.sum_button, self.sum_axe_front, self.sum_axe_below]
