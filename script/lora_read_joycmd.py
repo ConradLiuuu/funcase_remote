@@ -48,5 +48,9 @@ class lora_read_joycmd:
 
 if __name__ == '__main__':
     rospy.init_node("lora_read_joycmd")
+    rate = rospy.Rate(10)
     read = lora_read_joycmd()
-    read.read()
+
+    while not rospy.is_shutdown():
+        read.read()
+        rate.sleep()
