@@ -17,6 +17,7 @@ class Joycmd:
         self.pub_joycmd = rospy.Publisher('/joy_commands', UInt8MultiArray, queue_size = 10)
 
     def callback(self, data):
+        rate = rospy.Rate(10)
         self.axe = data.axes
         self.button = data.buttons
         self.joy = self.axe + self.button
@@ -61,6 +62,7 @@ class Joycmd:
         joy_cmddd = UInt8MultiArray()
         joy_cmddd.data = [self.sum_button, self.sum_axe_front, self.sum_axe_below]
         self.pub_joycmd.publish(joy_cmddd)
+        rate.sleep()
 
 if __name__ == '__main__':
     rospy.init_node('ros_write_joycommands')
