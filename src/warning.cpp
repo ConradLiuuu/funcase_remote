@@ -7,7 +7,7 @@ void callback(const std_msgs::Bool::ConstPtr& msg)
   if (msg -> data == true)
   {
     ROS_INFO("play warning one");
-    system("omxplayer -o local warning1.mp3");
+    system("omxplayer -o /home/aaaaa/catkin_ws/src/funcase_remote/src/local warning1.mp3");
   }
 }
 int main(int argc, char** argv)

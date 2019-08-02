@@ -261,7 +261,7 @@ class LoRa(object):
 
     # 設定讀取和頻段
     def FunLora_3_RX(self):
-       array1=[0xC1,3,5,3,1,0x65,0x7C,0x0f,0]
+       array1=[0xC1,3,5,3,1,0x58,0x2A,0x07,0]
        array1[8]=self.Fun_CRC(array1)
        data=self.FunLora_ChipSendByte(array1)
        return data
